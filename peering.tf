@@ -98,13 +98,6 @@ resource "aws_vpc_peering_connection_accepter" "use-euw-a" {
     }
 }
 
-resource "aws_route" "peer-route-use-euw-a" {
-    provider                    = "aws"
-    route_table_id              = "${aws_vpc.primary-vpc.default_route_table_id}"
-    destination_cidr_block      = "10.4.0.0/16"
-    vpc_peering_connection_id   = "${aws_vpc_peering_connection.use-euw.id}"
-}
-
 resource "aws_route" "peer-route-use-euw-b" {
     provider                    = "aws.euw"
     route_table_id              = "${aws_vpc.third-vpc.default_route_table_id}"
