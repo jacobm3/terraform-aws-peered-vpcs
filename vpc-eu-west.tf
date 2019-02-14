@@ -36,28 +36,32 @@ resource "aws_route" "public-routes-euw" {
 }
 
 resource "aws_eip" "eu-west-nat-ip" {
-    vpc = true
+    provider    = "aws.euw"
+    vpc         = true
 }
 
 resource "aws_nat_gateway" "eu-west-natgw" {
-    allocation_id = "${aws_eip.eu-west-nat-ip.id}"
-    subnet_id = "${aws_subnet.public-subnet-euw.id}"
-    depends_on = ["aws_internet_gateway.igw-euw","aws_subnet.public-subnet-euw"]
+    provider        = "aws.euw"
+    allocation_id   = "${aws_eip.eu-west-nat-ip.id}"
+    subnet_id       = "${aws_subnet.public-subnet-euw.id}"
+    depends_on      = ["aws_internet_gateway.igw-euw","aws_subnet.public-subnet-euw"]
 }
 
 resource "aws_route_table" "eu-west-natgw-route" {
-    vpc_id = "${aws_vpc.primary-vpc.id}"
+    provider            = "aws.euw"
+    vpc_id              = "${aws_vpc.primary-vpc.id}"
     route {
-        cidr_block = "0.0.0.0/0"
-        nat_gateway_id = "${aws_nat_gateway.eu-west-natgw.id}"
+        cidr_block      = "0.0.0.0/0"
+        nat_gateway_id  = "${aws_nat_gateway.eu-west-natgw.id}"
     }
 
     tags {
-        Name = "eu-west-natgw"
+        Name            = "eu-west-natgw"
     }
 }
 
 resource "aws_route_table_association" "eu-west-route-out" {
-    subnet_id = "${aws_subnet.private-subnet-euw.id}"
-    route_table_id = "${aws_route_table.eu-west-natgw-route.id}"
+    provider        = "aws.euw"
+    subnet_id       = "${aws_subnet.private-subnet-euw.id}"
+    route_table_id  = "${aws_route_table.eu-west-natgw-route.id}"
 }

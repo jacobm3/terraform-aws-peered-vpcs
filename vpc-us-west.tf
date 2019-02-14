@@ -36,16 +36,19 @@ resource "aws_route" "public-routes-usw" {
 }
 
 resource "aws_eip" "us-west-nat-ip" {
+    provider = "aws.usw"
     vpc = true
 }
 
 resource "aws_nat_gateway" "us-west-natgw" {
+    provider = "aws.usw"
     allocation_id = "${aws_eip.us-west-nat-ip.id}"
     subnet_id = "${aws_subnet.public-subnet-usw.id}"
     depends_on = ["aws_internet_gateway.igw-usw","aws_subnet.public-subnet-usw"]
 }
 
 resource "aws_route_table" "us-west-natgw-route" {
+    provider = "aws.usw"
     vpc_id = "${aws_vpc.primary-vpc.id}"
     route {
         cidr_block = "0.0.0.0/0"
@@ -58,6 +61,7 @@ resource "aws_route_table" "us-west-natgw-route" {
 }
 
 resource "aws_route_table_association" "us-west-route-out" {
+    provider = "aws.usw"
     subnet_id = "${aws_subnet.private-subnet-usw.id}"
     route_table_id = "${aws_route_table.us-west-natgw-route.id}"
 }
