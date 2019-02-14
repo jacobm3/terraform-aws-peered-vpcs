@@ -49,7 +49,7 @@ resource "aws_nat_gateway" "us-west-natgw" {
 
 resource "aws_route_table" "us-west-natgw-route" {
     provider = "aws.usw"
-    vpc_id = "${aws_vpc.primary-vpc.id}"
+    vpc_id = "${aws_vpc.second-vpc.id}"
     route {
         cidr_block = "0.0.0.0/0"
         nat_gateway_id = "${aws_nat_gateway.us-west-natgw.id}"

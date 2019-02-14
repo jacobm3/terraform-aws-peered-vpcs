@@ -49,7 +49,7 @@ resource "aws_nat_gateway" "eu-west-natgw" {
 
 resource "aws_route_table" "eu-west-natgw-route" {
     provider            = "aws.euw"
-    vpc_id              = "${aws_vpc.primary-vpc.id}"
+    vpc_id              = "${aws_vpc.third-vpc.id}"
     route {
         cidr_block      = "0.0.0.0/0"
         nat_gateway_id  = "${aws_nat_gateway.eu-west-natgw.id}"
