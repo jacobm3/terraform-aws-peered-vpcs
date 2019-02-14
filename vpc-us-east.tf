@@ -34,3 +34,30 @@ resource "aws_route" "public-routes-use" {
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.igw-use.id}"
 }
+
+resource "aws_iep" "us-east-nat-ip" {
+    vpc = true
+}
+
+resource "aws_nat_gateway" "us-east-natgw" {
+    allocation_id = "${aws_iep.us-east-nat-ip.id}"
+    subnet_id = "${aws_subnet.public-subnet-use.id}"
+    depends_on = ["${aws_internet_gateway.igw-use}"]
+}
+
+resource "aws_route_table" "us-east-natgw-route" {
+    vpc_id = "${aws_vpc.primary-vpc.id}"
+    route {
+        cidr_block = "0.0.0.0/0"
+        nat_gateway_id = "${aws_nat_gateway.us-east-natgw.id}"
+    }
+
+    tags {
+        Name = "us-east-natgw"
+    }
+}
+
+resource "aws_route_table_association" "us-east-route-out" {
+    subnet_id = "${aws_subnet.private-subnet-use.id}"
+    route_table_id = "${aws_route_table.us-east-natgw-route.id}"
+}
