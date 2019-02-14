@@ -35,12 +35,12 @@ resource "aws_route" "public-routes-usw" {
     gateway_id = "${aws_internet_gateway.igw-usw.id}"
 }
 
-resource "aws_iep" "us-west-nat-ip" {
+resource "aws_eip" "us-west-nat-ip" {
     vpc = true
 }
 
 resource "aws_nat_gateway" "us-west-natgw" {
-    allocation_id = "${aws_iep.us-west-nat-ip.id}"
+    allocation_id = "${aws_eip.us-west-nat-ip.id}"
     subnet_id = "${aws_subnet.public-subnet-usw.id}"
     depends_on = ["aws_internet_gateway.igw-usw"]
 }
