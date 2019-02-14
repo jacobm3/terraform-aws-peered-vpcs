@@ -42,7 +42,7 @@ resource "aws_eip" "eu-west-nat-ip" {
 resource "aws_nat_gateway" "eu-west-natgw" {
     allocation_id = "${aws_eip.eu-west-nat-ip.id}"
     subnet_id = "${aws_subnet.public-subnet-euw.id}"
-    depends_on = ["aws_internet_gateway.igw-euw"]
+    depends_on = ["aws_internet_gateway.igw-euw","aws_subnet.public-subnet-euw"]
 }
 
 resource "aws_route_table" "eu-west-natgw-route" {
