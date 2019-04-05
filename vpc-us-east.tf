@@ -43,7 +43,7 @@ resource "aws_eip" "us-east-nat-ip" {
 resource "aws_nat_gateway" "us-east-natgw" {
     provider = "aws"
     allocation_id   = "${aws_eip.us-east-nat-ip.id}"
-    subnet_id       = "${aws_subnet.private-subnet-use.id}"
+    subnet_id       = "${aws_subnet.public-subnet-use.id}"
     depends_on      = ["aws_internet_gateway.igw-use","aws_subnet.private-subnet-use"]
 }
 
